@@ -29,4 +29,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ghcr.io/DeivideSouza/go-api-app:${{ github.sha }}
+        tags: ghcr.io/deivideSouza/go-api-app:${{ github.sha }}
