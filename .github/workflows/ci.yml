@@ -15,7 +15,7 @@ jobs:
       contents: read
 
   #3. define the steps to execute in the job
-  steps:
+    steps:
     - name: checkout code
       uses: actions/checkout@v4
     - name: Login on Github Container Registry
