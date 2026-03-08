@@ -30,3 +30,21 @@ jobs:
         context: .
         push: true
         tags: ghcr.io/deividesouza/go-api-app:${{ github.sha }}
+    - name: Checkout do Repositório de Manifestos
+      uses: actions/checkout@v4
+      with:
+          repository: deividesouza/go-api-manifests 
+          path: manifests-repo                      
+          token: ${{ secrets.GITOPS_TOKEN }}        
+    - name: att tag image in deployment.yaml
+      run: |
+          sed -i "s|image: ghcr.io/deividesouza/go-api-app:.*|image: ghcr.io/deividesouza/go-api-app:${{ github.sha }}|g" manifests-repo/k8s/deployment.yaml
+      
+    - name: Commit e Push the changes manifests
+      run: |
+          cd manifests-repo
+          git config --global user.name "GitHub Actions CI"
+          git config --global user.email "actions@github.com"
+          git add k8s/deployment.yaml
+          git commit -m "chore: atualiza tag da imagem para ${{ github.sha }}"
+          git push
