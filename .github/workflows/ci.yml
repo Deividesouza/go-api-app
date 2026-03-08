@@ -1,0 +1,32 @@
+name: CI Pipeline - Build and Push
+
+#1. trigger the workflow on push to main branch
+on:
+  push:
+    branches:
+      - main
+#2. define the jobs to run in the workflow
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+  #3. define the steps to execute in the job
+  steps:
+    - name: checkout code
+      uses: actions/checkout@v4
+    - name: Login on Github Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ghcr.io/DeivideSouza/go-api-app:${{ github.sha }}
