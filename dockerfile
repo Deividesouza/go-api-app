@@ -22,7 +22,7 @@ FROM alpine:latest
 
 WORKDIR /app
 
-COPY --from=builder /app/api .
+COPY --chmod=755 --from=builder /app/api .
 
 
 EXPOSE 8080
